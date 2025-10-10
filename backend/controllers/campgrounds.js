@@ -20,8 +20,18 @@ exports.getCampgrounds= async (req, res, next) => {
 //@desc    Get one campground
 //@route   GET /api/v1/campgrounds/:id
 //@access  Public
-exports.getCampground=(req, res, next) => {
-    res.status(200).json({success: true, msg:`Show campground ${req.params.id}`});
+exports.getCampground= async (req, res, next) => {
+    try {
+        const campground = await Campground.findById(req.params.id);
+
+        if (!campground) {
+            return res.status(400).json({success: false});
+        }
+
+        res.status(200).json({success: true, data: campground});
+    } catch (err) {
+        res.status(400).json({success: false});
+    }
 };
 
 //@desc    Create one campground
@@ -38,13 +48,36 @@ exports.createCampground= async (req, res, next) => {
 //@desc    Update one campground
 //@route   PUT /api/v1/campgrounds/:id
 //@access  Private
-exports.updateCampground=(req, res, next) => {
-    res.status(200).json({success: true, msg:`Update hospital ${req.params.id}`});
+exports.updateCampground= async (req, res, next) => {
+    try {
+        const campground = await Campground.findByIdAndUpdate(req.params.id, req.body, {
+            new: true,
+            runValidators: true
+        });
+
+        if (!campground) {
+            res.status(400).json({success: false});
+        }
+
+        res.status(200).json({success: true, data: campground});
+    } catch (err) {
+        res.status(400).json({success: false});
+    }
 };
 
 //@desc    Delete one campground
 //@route   DELETE /api/v1/campgrounds/:id
 //@access  Private
-exports.deleteCampground=(req, res, next) => {
-    res.status(200).json({success: true, msg:`Delete campground ${req.params.id}`});
+exports.deleteCampground= async (req, res, next) => {
+    try {
+        const campground = await Campground.findByIdAndDelete(req.params.id);
+        
+        if (!campground) {
+            res.status(400).json({success: false});
+        }
+
+        res.status(200).json({success: true, data: {}});
+    } catch(err) {
+        res.status(400).json({success: false});
+    }
 };
