@@ -28,6 +28,7 @@ exports.register = async (req, res, next) => {
 //@access  Public
 exports.login = async (req, res, next) => {
   const { email, password } = req.body;
+  console.log(email, password )
 
   //Validate email & password
   if (!email || !password) {
@@ -62,7 +63,7 @@ const sendTokenResponse = (user, statusCode, res) => {
     expires: new Date(
       Date.now() + process.env.JWT_COOKIE_EXPIRE * 24 * 60 * 60 * 1000
     ),
-    httpOnly: true,
+    httpOnly: false
   };
 
   if (process.env.NODE_ENV === "production") {

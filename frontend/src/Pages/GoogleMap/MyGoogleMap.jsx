@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import {
   GoogleMap,
   useJsApiLoader,
@@ -8,37 +8,55 @@ import {
 
 import "../../index.css";
 import Camp from "../CampPage/Camp.jsx";
-import { campdata } from "../CampPage/CampData.jsx";
+import { getCampgrounds } from "../../service/campService.js";
 
 const containerStyle = {
   width: "100%",
   height: "100vh",
 };
-// ตำแหน่งเริ่มต้นของแผนที่ (ตัวอย่าง: กรุงเทพมหานคร)
+// ตำแหน่งเริ่มต้นของแผนที่ (กรุงเทพมหานคร)
 const center = {
   lat: 13.7563,
   lng: 100.5018,
 };
 
 function MyGoogleMap() {
-  const [campgrounds, setCampgrounds] = useState(campdata);
+  const [campgrounds, setCampgrounds] = useState([]);
+  const [onMouseOverIndex, setOnMouseOverIndex] = useState(null);
+  const [selectedCamp, setSelectedCamp] = useState(null);
   const [showDetail, setShowDetail] = useState(false);
+
+  useEffect(() => {
+    getAllCampData();
+  }, []);
+
+  const getAllCampData = async () => {
+    const allCampgrounds = await getCampgrounds();
+    setCampgrounds(allCampgrounds.data);
+    console.log("getCampgrounds() result:", allCampgrounds.data);
+
+    return allCampgrounds;
+  };
 
   const { isLoaded } = useJsApiLoader({
     id: "google-map-script",
     googleMapsApiKey: "AIzaSyDdAmHuKvXQCnc-UP69yOPHyvRXezi4SGU",
   });
 
-  const infoOpen = (name) => {
-    setCampgrounds(
-      campgrounds.map((i) => (i.name == name ? { ...i, show: true } : i))
-    );
+  const infoOpen = (index, camp) => {
+    setOnMouseOverIndex(index);
+    setSelectedCamp(camp);
   };
 
-  const infoClose = (name) => {
-    setCampgrounds(
-      campgrounds.map((i) => (i.name == name ? { ...i, show: false } : i))
-    );
+  const infoClose = () => {
+    setOnMouseOverIndex(null);
+  };
+
+  const openDetail = () => {
+    setShowDetail(true);
+  };
+  const closeDetail = () => {
+    setShowDetail(false);
   };
 
   if (!isLoaded) {
@@ -51,14 +69,11 @@ function MyGoogleMap() {
         <Marker
           key={index}
           position={{ lat: camp.lat, lng: camp.lng }}
-          onClick={() => {
-            setShowDetail(true);
-            console.log("test");
-          }}
-          onMouseOver={() => infoOpen(camp.name)}
-          onMouseOut={() => infoClose(camp.name)}
+          onClick={openDetail}
+          onMouseOver={() => infoOpen(index, camp)}
+          onMouseOut={infoClose}
         >
-          {camp.show && (
+          {index == onMouseOverIndex && (
             <InfoWindow position={{ lat: camp.lat, lng: camp.lng }}>
               <div className="flex flex-col justify-center items-center p-2 gap-2">
                 <h3 className="font-bold text-[18px]">{camp.name}</h3>
@@ -71,7 +86,7 @@ function MyGoogleMap() {
 
           {showDetail && (
             <div className="fixed inset-0 bg-white">
-              <Camp camp={camp} onBack={() => setShowDetail(false)} />
+              <Camp camp={selectedCamp} onBack={closeDetail} />
             </div>
           )}
         </Marker>
