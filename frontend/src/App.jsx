@@ -1,5 +1,6 @@
+import {Outlet} from "react-router-dom";
 import MyGoogleMap from './Pages/GoogleMap/MyGoogleMap'; 
-import Header from './Pages/Header/Header';
+import Header from './Components/Header';
 
 const containerStyle = {
   width: "400px",
@@ -15,9 +16,9 @@ function App() {
 
   return (
     <>
-    <Header></Header>
-     <MyGoogleMap></MyGoogleMap>
-     
+      <Header/>
+      {/* <MyGoogleMap></MyGoogleMap> */}
+      <Outlet/>
     </>
   )
 }
