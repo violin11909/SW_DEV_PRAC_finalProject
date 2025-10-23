@@ -12,6 +12,20 @@ const getAuthHeaders = () => {
   };
 };
 
+export const register = async (newUser) => {
+  try {
+    const res = await fetch(`${API_URL}/auth/register`, {
+      method: "POST",
+      headers: {"Content-Type": "application/json"},
+      body: JSON.stringify(newUser)
+    });
+    return await res.json();
+  } catch(err) {
+    console.error("Registration failed: ", err);
+    throw new Error("Can not create user");
+  }
+};
+
 export const login = async (email, password) => {
   try {
     const res = await fetch(`${API_URL}/auth/login`, {

@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { login } from "../../service/userService";
+import { register } from "../../service/userService";
 import { useNavigate } from "react-router-dom";
 import { FaArrowLeft } from "react-icons/fa6";
 import RenderStep from "./RenderStep";
@@ -19,22 +19,41 @@ const Signup = () => {
   const onBack = () => {
     navigate("/");
   };
+
   const next = () => {
     if (checkSignUpInfo()) {
       setStep(2);
     }
   };
-  const submitSignUp = () => {
+
+  const submitSignUp = async () => {
     if (checkSignUpInfo()) {
-      alert("success");
-      //   navigate('/map')
+      const newUser = {
+        name,
+        email,
+        password,
+        tel: phone
+      };
+
+      try {
+        const res = await register(newUser);
+        if (res.success) {
+          alert("success");
+          // navigate('/map') go tp homepage
+        } else {
+          alert(res.message || "Registration failed");
+        }
+      } catch(err) {
+        console.log(err);
+        alert("Error while registering user");
+      }
     }
   };
 
   const checkSignUpInfo = () => {
     if (step == 1) {
       if (!email || !password || !confirmPassword) {
-        alert("Please fill all information");
+        alert("Please fill up the information!");
         return false;
       }
       const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;

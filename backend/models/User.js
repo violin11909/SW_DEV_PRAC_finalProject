@@ -27,6 +27,9 @@ const UserSchema = new mongoose.Schema({
         minlength: 6,
         select: false
     },
+    tel: {
+      type: String,
+    },
     resetPasswordToken: String,
     resetPasswordExpire: Date,
     createdAt: {

@@ -8,11 +8,17 @@ const Login = () => {
   const navigate = useNavigate();
 
   const sendLogin = async () => {
+    if (!email || !password) {
+      alert("Please fill up the information!")
+      return;
+    }
+
     const res = await login(email.trim(), password);
     if (res.success) {
       navigate("/map");
     }
   };
+
   const gotoSignUp = () => {
     navigate("/signup");
   };
