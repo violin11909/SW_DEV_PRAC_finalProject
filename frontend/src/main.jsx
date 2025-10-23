@@ -21,18 +21,10 @@ let router = createBrowserRouter([
     path: "/camp",
     Component: Camp,
   },
-<<<<<<< HEAD
-  {
-    path: "/login",
-    Component: TestLogin
-  }
-||||||| 0ba6272
-=======
   {
     path: "/signup",
     Component: Signup,
   },
->>>>>>> 2312a34a9c4a34bbeedd98edb35671c0baa06b6c
 ]);
 createRoot(document.getElementById("root")).render(
   <StrictMode>
