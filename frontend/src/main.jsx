@@ -20,6 +20,10 @@ let router = createBrowserRouter([
     path: "/camp",
     Component: Camp,
   },
+  {
+    path: "/login",
+    Component: TestLogin
+  }
 ]);
 createRoot(document.getElementById("root")).render(
   <StrictMode>

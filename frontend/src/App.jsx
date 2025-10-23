@@ -1,4 +1,5 @@
 import MyGoogleMap from './Pages/GoogleMap/MyGoogleMap'; 
+import Header from './Pages/Header/Header';
 
 const containerStyle = {
   width: "400px",
@@ -14,6 +15,7 @@ function App() {
 
   return (
     <>
+    <Header></Header>
      <MyGoogleMap></MyGoogleMap>
      
     </>
