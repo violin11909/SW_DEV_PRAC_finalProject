@@ -15,7 +15,7 @@ const Login = () => {
 
     const res = await login(email.trim(), password);
     if (res.success) {
-      navigate("/map");
+      navigate("/homepage");
     }
   };
 

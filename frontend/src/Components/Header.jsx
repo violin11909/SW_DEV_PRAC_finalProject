@@ -8,16 +8,22 @@ import Cookies from "js-cookie";
 function Header() {
     const navigate = useNavigate();
     const [user, setUser] = useState(null);
+    const [isLoading, setIsLoading] = useState(true);
 
     useEffect(() => {
         const token = Cookies.get("token");
         if (token) {
             getMe().then(data => {
                 if (data.success) {
-                    console.log("user = ", data.data.userType)
+                    console.log("user = ", data.data.name);
                     setUser(data.data);
                 }
+            })
+            .finally(() => {
+                setIsLoading(false);
             });
+        } else {
+            setIsLoading(false);
         }
     }, []);
 
@@ -32,7 +38,7 @@ function Header() {
         <header className="bg-white shadow-md py-4">
             <div className="containter mx-auto flex justify-between items-center px-6">
                 <Link 
-                    to='/'
+                    to={user ? '/homepage' : '/'}
                     className="text-2xl font-bold text-blue-700 hover:text-blue-900 transition duration-200"    
                 >
                     Booking Camp
